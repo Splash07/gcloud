@@ -1,0 +1,22 @@
+image: docker:19.03.0
+
+services:
+  - docker:19.03.0-dind
+stages:
+  - build-image
+
+build-gcloud-kubectl:
+  stage: build-image
+  before_script:
+    - apk add gettext
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - cd gcloud-kubectl/
+  script:
+    - envsubst <datnt-service-account.json.tpl> datnt-service-account.json
+    - docker build $CI_REGISTRY_IMAGE/gcloud-kubectl:latest .
+    - docker push $CI_REGISTRY_IMAGE/gcloud-kubectl:latest
+  only:
+    refs:
+      - master
+    changes:
+      - gcloud-kubectl/* 
