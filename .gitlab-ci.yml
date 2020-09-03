@@ -12,7 +12,6 @@ build-gcloud-kubectl:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - cd gcloud-kubectl/
   script:
-    - envsubst <datnt-service-account.json.tpl> datnt-service-account.json
     - docker build $CI_REGISTRY_IMAGE/gcloud-kubectl:latest .
     - docker push $CI_REGISTRY_IMAGE/gcloud-kubectl:latest
   only:
